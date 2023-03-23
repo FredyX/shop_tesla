@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, SetMetadata } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { IncomingHttpHeaders, request } from 'http';
 import { use } from 'passport';
 import { AuthService } from './auth.service';
@@ -13,21 +14,26 @@ import { User } from './entities/user.entity';
 import { UserRoleGuard } from './guards/user-role.guard';
 import { validRoles } from './interfaces/valid-roles';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
+  @ApiResponse({status: 201, description: 'User was created', type: User})
+  @ApiResponse({status: 400, description: 'Bad request'})
   createUser(@Body() createUserDto: CreateUserDto) {
     return this.authService.create(createUserDto);
   }
 
   @Post('login')
+  @ApiResponse({status: 400, description: 'Bad request'})
   loginUser(@Body() loginUserDto: LoginUserDto){
     return this.authService.loginUser(loginUserDto);
   }
 
   @Get('check-status')
+  @ApiResponse({ status: 400, description: 'Bad request' })
   @Auth()
   checkAuthStatus(
     @GetUser() user: User
@@ -38,6 +44,7 @@ export class AuthController {
   //@GetUser() request: Express.Request
   @Get('private')
   @UseGuards( AuthGuard())
+  @ApiResponse({ status: 400, description: 'Bad request' })
   testPrivateRoute(
     @Req() request: Express.Request,
     @GetUser(['email','role']) user: User,
@@ -58,6 +65,8 @@ export class AuthController {
   
   // @SetMetadata('roles',['admin','super-user'])
   @Get('private2')
+  
+  @ApiResponse({ status: 400, description: 'Bad request' })
   //@RoleProtected(validRoles.superUser)
   @UseGuards( AuthGuard(), UserRoleGuard)
   privateRoute(
@@ -79,9 +88,5 @@ export class AuthController {
       ok: true,
       user
     }
-  }
- 
- 
-
-  
+  } 
 }
