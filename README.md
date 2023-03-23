@@ -5,16 +5,25 @@
 
 # Teslo API
 
-1. Clonar proyecto
+This poject offers an API to add, delete, update products ans users, authenticate them an authoriza their access to different routes, use data base Postgresql.
+===
+Package:
+- TypeORM
+- Passport
+- Swagger
+- JWT
+- Bcrypt
+
+1. Clone project
 2. ```yarn install```
-3. Clonar el archivo ```.env.template``` y renombrarlo a ```.env```
-4. Cambiar las variables de entorno
-5. Levantar la base de datos
+3. Clone the file ```.env.template``` rename a ```.env```
+4. change the environment variables
+5. start data base
 ```
 docker-compose up -d
 ```
 
-6. Ejecutar SEED 
+6. Execute SEED 
 ```
 http://localhost:3000/api/seed
 ```

@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, SetMetadata } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { IncomingHttpHeaders, request } from 'http';
 import { use } from 'passport';
 import { AuthService } from './auth.service';
@@ -69,6 +69,11 @@ export class AuthController {
   @ApiResponse({ status: 400, description: 'Bad request' })
   //@RoleProtected(validRoles.superUser)
   @UseGuards( AuthGuard(), UserRoleGuard)
+  @ApiOkResponse({
+    description: `response whit user valid as admin, so it have authorization
+     the endpoind, valid with userGuards the separately`,
+     type: User
+  })
   privateRoute(
     @GetUser() user: User 
   ){
@@ -80,6 +85,11 @@ export class AuthController {
  
   @Get('private3')
   @Auth( validRoles.admin )
+  @ApiOkResponse({
+    description: `response whit user valid as admin, so it have authorization
+     the endpoind , `,
+     type: User
+  })
   privateRoute3(
     @GetUser() user: User
   ) {
